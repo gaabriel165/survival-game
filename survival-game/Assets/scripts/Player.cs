@@ -54,12 +54,17 @@ public class Player : MonoBehaviour{
             this.playerAnimation.PlayAnimation("playeridle");
         }
 
-        if (Input.GetMouseButtonDown(0) && bullets >= 1){
+        if (Input.GetMouseButtonDown(0) && bullets >= 1 && Time.timeScale != 0){
             StartCoroutine(this.ShowTiro());
             Instantiate(bulletPrefab, shootingPoint.position, this.spritePlayer.transform.rotation);
             this.gunSound.Play();
 
             this.bullets -= 1;
+        }
+
+        if(this.health <= 0)
+        {
+            Time.timeScale = 0;
         }
     }
 

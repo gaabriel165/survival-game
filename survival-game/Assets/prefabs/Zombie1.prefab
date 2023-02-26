@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAnimator: {fileID: 775905959554396863}
+  enemyAnimatorGameObject: {fileID: 775905959554396861}
   lifebar: {fileID: 8449357661914087896}
   speed: 3
 --- !u!1 &775905959075655182

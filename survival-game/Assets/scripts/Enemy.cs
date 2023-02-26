@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     
     public Animator enemyAnimator;
+    public GameObject enemyAnimatorGameObject;
 
     private GameObject nextPlayer;
     private GameObject player;
@@ -30,7 +31,10 @@ public class Enemy : MonoBehaviour
     }
 
     void Update(){
-        lifebar.transform.localScale = new Vector3(this.health / 100, 0.5364848f, 0);
+        if (lifebar)
+        {
+            lifebar.transform.localScale = new Vector3(this.health / 100, 0.5364848f, 0);
+        }
 
         Vector3 direction = player.transform.position - this.transform.position;
 
@@ -41,13 +45,29 @@ public class Enemy : MonoBehaviour
         direction.Normalize();
         movement = direction;
 
-        if(this.health <= 0){
-            Destroy(this.gameObject);
+
+        if (this.health <= 0){
+            this.rb.bodyType = RigidbodyType2D.Static;
+            this.speed = 0;
+            Destroy(lifebar);
+            enemyAnimatorGameObject.GetComponent<PolygonCollider2D>().enabled = false;
+            enemyAnimator.Play("zombie1death");
+
+            StartCoroutine(this.destroyEnemy());
         }
     }
 
+    private IEnumerator destroyEnemy()
+    {
+        yield return new WaitForSeconds(2);
+        Destroy(this.gameObject);
+    }
+
     private void FixedUpdate() {
-        moveCharacter(movement);    
+        if(this.health > 0)
+        {
+            moveCharacter(movement);
+        }
     }
 
     void moveCharacter(Vector2 direction){
@@ -55,7 +75,6 @@ public class Enemy : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collisionObject) {
-        Debug.Log("entrou aq");
         if(collisionObject.gameObject.tag == "nextPlayer"){
             enemyAnimator.Play("zombie1attack");
         }else{
